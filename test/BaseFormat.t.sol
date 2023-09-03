@@ -23,7 +23,7 @@ contract BaseFormatTest is Test {
         assertEq(BaseFormat.toString(1.251e18, 18, 6, false), "1.251000");
     }
 
-    function test_format() public {
+    function test_formatNumber() public {
         assertEq(string("hey: {}").formatNext(1), "hey: 1", "only pre");
         assertEq(string("hey: {} wow").formatNext(1), "hey: 1 wow", "with after");
         assertEq(string("hey: {:18} wow").formatNext(1.2e18), "hey: 1.200000000000000000 wow", "with after & decimals");
@@ -31,6 +31,13 @@ contract BaseFormatTest is Test {
         assertEq(
             string("hey: {:18.3} wow").formatNext(123.2035e18), "hey: 123.204 wow", "with after & decimals & rounding"
         );
-        assertEq(string("hey: {:3.6} wow").formatNext(123.56e3), "hey: 123.560000 wow", "with after & decimals & rounding");
+        assertEq(
+            string("hey: {:3.6} wow").formatNext(123.56e3), "hey: 123.560000 wow", "with after & decimals & rounding"
+        );
+    }
+
+    function test_formatString() public {
+        assertEq(string("value: {}").formatNext("hey"), "value: hey");
+        assertEq(string("({})").formatNext("wowzaaaaaaaaaaaaa"), "(wowzaaaaaaaaaaaaa)");
     }
 }

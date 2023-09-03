@@ -37,6 +37,7 @@ library BaseFormat {
     error MissingMatchingBrace();
     error UnsupportedOperatorChar(bytes1 char);
     error UnsupportedFormat(uint256 formatFlags);
+    error StringFormatOptionsNotYetSupported();
 
     uint256 internal constant _LEFTOVER_CURLY_ERROR_SELECTOR = 0xa0242251;
     uint256 internal constant _NO_GROUP_ERROR_SELECTOR = 0x82566ff3;
@@ -169,9 +170,18 @@ library BaseFormat {
             }
         }
 
-        unchecked {
-            return str.extendDecimal(value, decimals, round, false).concat(base.slice(group.getEnd())).alloc();
-        }
+        return str.extendDecimal(value, decimals, round, false).concat(base.slice(group.getEnd())).alloc();
+    }
+
+    function formatNext(string memory base, string memory value) internal pure returns (string memory out) {
+        Slice group = nextFormatGroup(base);
+        if (group.length() != 2) revert StringFormatOptionsNotYetSupported();
+        // forgefmt: disable-next-item
+        return StringUtils.newUnalloc()
+            .concat(base.slice(0, group.getStart()))
+            .concat(value.asSlice())
+            .concat(base.slice(group.getEnd()))
+            .alloc();
     }
 
     function formatEnd(string memory base) internal pure returns (string memory out) {
