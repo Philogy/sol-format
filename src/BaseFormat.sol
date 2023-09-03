@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import {MemPtr} from "./Types.sol";
 import {SliceLib, Slice} from "./SliceLib.sol";
 import {StringUtils, UnallocatedString} from "./StringUtils.sol";
-import {LibString} from "solady/utils/LibString.sol";
+import {LibString} from "solady/src/utils/LibString.sol";
 
 /// @author philogy <https://github.com/philogy>
 library BaseFormat {
