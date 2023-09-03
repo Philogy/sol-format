@@ -45,7 +45,6 @@ contract FormatTest is Test {
 - ❌ binary number formatting e.g. `{b}`, `{03b}`
 
 ### Addresses
-By default addresses are formatted as not check summed
-- ❌ by default not check-summed, check summed via `C` e.g. `{C}`, { 30C}
-- ❌ insert address label via `L` e.g. {L}, { 10L}
+By default addresses are formatted as check-summed addresses
+- ❌ by default not check-summed, check summed via `c` e.g. `{c}`, { 30C}
 
