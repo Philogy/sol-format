@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import {MemPtr} from "./Types.sol";
 import {SliceLib, Slice} from "./SliceLib.sol";
 import {StringUtils, UnallocatedString} from "./StringUtils.sol";
+import {LibString} from "solady/utils/LibString.sol";
 
 /// @author philogy <https://github.com/philogy>
 library BaseFormat {
@@ -142,6 +143,9 @@ library BaseFormat {
                 ptr := add(ptr, 1)
 
                 switch char
+                case 0x20 {
+                    // Whitespace, ignore.
+                }
                 case 0x2e {
                     /* ROUND '.' */
                     ptr, round := parseUint(ptr)
@@ -182,6 +186,14 @@ library BaseFormat {
             .concat(value.asSlice())
             .concat(base.slice(group.getEnd()))
             .alloc();
+    }
+
+    function formatNext(string memory base, bool value) internal pure returns (string memory) {
+        return base.formatNext(value ? "true" : "false");
+    }
+
+    function formatNext(string memory base, address value) internal pure returns (string memory) {
+        return base.formatNext(LibString.toHexStringChecksummed(value));
     }
 
     function formatEnd(string memory base) internal pure returns (string memory out) {

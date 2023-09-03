@@ -34,10 +34,30 @@ contract BaseFormatTest is Test {
         assertEq(
             string("hey: {:3.6} wow").formatNext(123.56e3), "hey: 123.560000 wow", "with after & decimals & rounding"
         );
+        assertEq(
+            string("balance: {:{}.3 } }}").formatNext(18).formatNext(12_387.28299e18).formatEnd(),
+            "balance: 12387.283 }"
+        );
     }
 
-    function test_formatString() public {
-        assertEq(string("value: {}").formatNext("hey"), "value: hey");
-        assertEq(string("({})").formatNext("wowzaaaaaaaaaaaaa"), "(wowzaaaaaaaaaaaaa)");
+    function test_fuzzing_formatString(string memory inp) public {
+        assertEq(string("value: {}").formatNext(inp), string.concat("value: ", inp));
+        assertEq(string("({})").formatNext(inp), string.concat("(", inp, ")"));
+    }
+
+    function test_fuzzing_formatBool(bool b) public {
+        assertEq(string("value: {}").formatNext(b), string.concat("value: ", b ? "true" : "false"));
+        assertEq(string("({})").formatNext(b), string.concat("(", b ? "true" : "false", ")"));
+    }
+
+    function test_formatAddress() public {
+        assertEq(
+            string("value: {}").formatNext(0x6d871fE2cd38cad003c7Ed061221b469194815D1),
+            "value: 0x6d871fE2cd38cad003c7Ed061221b469194815D1"
+        );
+        assertEq(
+            string("({})").formatNext(0x6d871fE2cd38cad003c7Ed061221b469194815D1),
+            "(0x6d871fE2cd38cad003c7Ed061221b469194815D1)"
+        );
     }
 }
